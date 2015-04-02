@@ -29,8 +29,8 @@ density quantities between [um], [cm^-1] and [Hz] and spectral convolution.
 
 See the __main__ function for examples of use.
 
-This package was partly developed to provide additional material in support of students 
-and readers of the book Electro-Optical System Analysis and Design: A Radiometry 
+This package was partly developed to provide additional material in support of students
+and readers of the book Electro-Optical System Analysis and Design: A Radiometry
 Perspective,  Cornelius J. Willers, ISBN 9780819495693, SPIE Monograph Volume
 PM236, SPIE Press, 2013.  http://spie.org/x648.html?product_id=2021423&origin_id=x646
 """
@@ -49,9 +49,9 @@ __all__= ['sfilter', 'responsivity', 'effectiveValue', 'convertSpectralDomain',
          ]
 
 import sys
-if sys.version_info[0] > 2:
-    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
-    exit(-1)
+#if sys.version_info[0] > 2:
+#    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
+#    exit(-1)
 
 
 import numpy as np
@@ -60,12 +60,12 @@ from scipy import constants
 ##############################################################################
 ##
 def framesFirst(imageSequence):
-    """Image sequence with frames along axis=2 (last index), reordered such that 
+    """Image sequence with frames along axis=2 (last index), reordered such that
     frames are along axis=0 (first index).
 
     Image sequences are stored in three-dimensional arrays, in rows, columns and frames.
-    Not all libraries share the same sequencing, some store frames along axis=0 and 
-    others store frames along axis=2.  This function reorders an image sequence with 
+    Not all libraries share the same sequencing, some store frames along axis=0 and
+    others store frames along axis=2.  This function reorders an image sequence with
     frames along axis=2  to an image sequence with frames along axis=0. The function
     uses np.transpose(imageSequence, (2,0,1))
 
@@ -85,12 +85,12 @@ def framesFirst(imageSequence):
 ##############################################################################
 ##
 def framesLast(imageSequence):
-    """Image sequence with frames along axis=0 (first index), reordered such that 
+    """Image sequence with frames along axis=0 (first index), reordered such that
     frames are along axis=2 (last index).
 
     Image sequences are stored in three-dimensional arrays, in rows, columns and frames.
-    Not all libraries share the same sequencing, some store frames along axis=0 and 
-    others store frames along axis=2.  This function reorders an image sequence with 
+    Not all libraries share the same sequencing, some store frames along axis=0 and
+    others store frames along axis=2.  This function reorders an image sequence with
     frames along axis=0  to an image sequence with frames along axis=2.  The function
     uses np.transpose(imageSequence, (1,2,0))
 
@@ -114,18 +114,18 @@ def framesLast(imageSequence):
 def index_coords(data, origin=None, framesFirst=True):
     """Creates (x,y) zero-based coordinate arrrays for a numpy array indices, relative to some origin.
 
-    This function calculates two meshgrid arrays containing the coordinates of the 
-    input array.  The origin of the new coordinate system  defaults to the 
-    center of the image, unless the user supplies a new origin. 
+    This function calculates two meshgrid arrays containing the coordinates of the
+    input array.  The origin of the new coordinate system  defaults to the
+    center of the image, unless the user supplies a new origin.
 
-    The data format can be data.shape = (rows, cols, frames) or 
-    data.shape = (frames, rows, cols), the format of which is indicated by the 
+    The data format can be data.shape = (rows, cols, frames) or
+    data.shape = (frames, rows, cols), the format of which is indicated by the
     framesFirst parameter.
 
     Args:
         | data (np.array): array for which coordinates must be calculated.
         | origin ( (x-orig, y-orig) ): data-coordinates of where origin should be
-        | framesFirst (bool): True if data.shape is (frames, rows, cols), False if 
+        | framesFirst (bool): True if data.shape is (frames, rows, cols), False if
             data.shape is (rows, cols, frames)
 
     Returns:
@@ -205,7 +205,7 @@ def polar2cart(r, theta):
 def upMu(uprightMu=True, textcomp=False):
     """Returns a LaTeX micron symbol, either an upright version or the normal symbol.
 
-    The upright symbol requires that the siunitx LaTeX package be installed on the 
+    The upright symbol requires that the siunitx LaTeX package be installed on the
     computer running the code.  This function also changes the Matplotlib rcParams
     file.
 
@@ -238,7 +238,7 @@ def upMu(uprightMu=True, textcomp=False):
           r'\usepackage{helvet}',  # set the normal font here
           r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
           r'\sansmath'  # <- tricky! -- gotta actually tell tex to use!
-          ] 
+          ]
         upmu = r'\textmu{}'
     else:
       upmu = '$\mu$'
@@ -592,7 +592,7 @@ def convertSpectralDomain(inspectraldomain,  type=''):
 def convertSpectralDensity(inspectraldomain,  inspectralquantity, type=''):
     """Convert spectral density quantities, i.e. between W/(m^2.um), W/(m^2.cm^-1) and W/(m^2.Hz).
 
-    In string variable type, the 'from' domain and 'to' domains are indicated each with a 
+    In string variable type, the 'from' domain and 'to' domains are indicated each with a
     single letter:
     'f' for temporal frequency, 'w' for wavelength and ''n' for wavenumber
     The 'from' domain is the first letter and the 'to' domain the second letter.
@@ -607,9 +607,9 @@ def convertSpectralDensity(inspectraldomain,  inspectralquantity, type=''):
     or otherwise sampled).
 
     Args:
-        | inspectraldomain (np.array[N,] or [N,1]):  spectral domain in wavelength, 
+        | inspectraldomain (np.array[N,] or [N,1]):  spectral domain in wavelength,
             frequency or wavenumber.
-        | inspectralquantity (np.array[N,] or [N,1]):  spectral density in same domain 
+        | inspectralquantity (np.array[N,] or [N,1]):  spectral density in same domain
            as domain vector above.
         |    wavelength vector in  [um]
         |    frequency vector in  [Hz]
@@ -673,9 +673,9 @@ def savitzkyGolay1D(y, window_size, order, deriv=0, rate=1):
 
     Source: http://wiki.scipy.org/Cookbook/SavitzkyGolay
 
-    The Savitzky Golay filter is a particular type of low-pass filter, 
-    well adapted for data smoothing. For further information see: 
-    http://www.wire.tu-bs.de/OLDWEB/mameyer/cmr/savgol.pdf 
+    The Savitzky Golay filter is a particular type of low-pass filter,
+    well adapted for data smoothing. For further information see:
+    http://www.wire.tu-bs.de/OLDWEB/mameyer/cmr/savgol.pdf
 
 
     The Savitzky-Golay filter removes high frequency noise from data.
@@ -731,7 +731,7 @@ def savitzkyGolay1D(y, window_size, order, deriv=0, rate=1):
     try:
         window_size = np.abs(np.int(window_size))
         order = np.abs(np.int(order))
-    except ValueError, msg:
+    except ValueError(msg):
         raise ValueError("window_size and order have to be of type int")
     if window_size % 2 != 1 or window_size < 1:
         raise TypeError("window_size size must be a positive odd number")
@@ -911,7 +911,7 @@ if __name__ == '__main__':
     print(wavelenRef/wavel)
 
     ## plot some conversions
-    wl = np.linspace(1, 14, 101)#.reshape(-1,1) # wavelength 
+    wl = np.linspace(1, 14, 101)#.reshape(-1,1) # wavelength
     wn = convertSpectralDomain(wl, type='ln') # wavenumber
     radiancewl = ryplanck.planck(wl,1000, 'el') / np.pi
     _,radiancewn1 = convertSpectralDensity(wl,radiancewl, 'ln')

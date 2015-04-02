@@ -22,16 +22,16 @@
 ################################################################
 """
 This module provides functions for file input/output. These are all wrapper
-functions, based on existing functions in other Python classes. Functions are 
-provided to save a two-dimensional array to a text file, load selected columns 
-of data from a text file, load a column header line, compact strings to include 
-only legal filename characters, and a function from the Python Cookbook to 
+functions, based on existing functions in other Python classes. Functions are
+provided to save a two-dimensional array to a text file, load selected columns
+of data from a text file, load a column header line, compact strings to include
+only legal filename characters, and a function from the Python Cookbook to
 recursively match filename patterns.
 
 See the __main__ function for examples of use.
 
-This package was partly developed to provide additional material in support of students 
-and readers of the book Electro-Optical System Analysis and Design: A Radiometry 
+This package was partly developed to provide additional material in support of students
+and readers of the book Electro-Optical System Analysis and Design: A Radiometry
 Perspective,  Cornelius J. Willers, ISBN 9780819495693, SPIE Monograph Volume
 PM236, SPIE Press, 2013.  http://spie.org/x648.html?product_id=2021423&origin_id=x646
 """
@@ -43,17 +43,17 @@ from __future__ import unicode_literals
 
 __version__= "$Revision$"
 __author__='pyradi team'
-__all__=['saveHeaderArrayTextFile', 'loadColumnTextFile', 'loadHeaderTextFile', 
+__all__=['saveHeaderArrayTextFile', 'loadColumnTextFile', 'loadHeaderTextFile',
          'cleanFilename', 'listFiles','readRawFrames','rawFrameToImageFile',
          'arrayToLaTex','epsLaTexFigure',
-         'read2DLookupTable', 
+         'read2DLookupTable',
          'downloadFileUrl', 'unzipGZipfile', 'untarTarfile',
          'downloadUntar']
 
 import sys
-if sys.version_info[0] > 2:
-    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
-    exit(-1)
+#if sys.version_info[0] > 2:
+#    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
+#    exit(-1)
 
 
 from scipy.interpolate import interp1d
@@ -102,14 +102,14 @@ def loadColumnTextFile(filename, loadCol=[1],  \
         abscissaScale=1,ordinateScale=1, abscissaOut=None, returnAbscissa=False):
     """Load selected column data from a text file, processing as specified.
 
-    This function loads column data from a text file, scaling and interpolating 
-    the read-in data, according to user specification. The first 0'th column has 
-    special significance: it is considered the abscissa (x-values) of the data 
+    This function loads column data from a text file, scaling and interpolating
+    the read-in data, according to user specification. The first 0'th column has
+    special significance: it is considered the abscissa (x-values) of the data
     set, while the remaining columns are any number of ordinate (y-value) vectors.
-    The user passes a list of columns to be read (default is [1]) - only these 
-    columns are read, processed and returned when the function exits.The user 
-    also passes an abscissa vector to which the input data is interpolated and 
-    then subsequently amplitude scaled or normalised.  
+    The user passes a list of columns to be read (default is [1]) - only these
+    columns are read, processed and returned when the function exits.The user
+    also passes an abscissa vector to which the input data is interpolated and
+    then subsequently amplitude scaled or normalised.
 
     Note: leave only single separators (e.g. spaces) between columns!
     Also watch out for a single space at the start of line.
@@ -206,7 +206,7 @@ def loadHeaderTextFile(filename, loadCol=[1], comment=None):
 def cleanFilename(sourcestring,  removestring =" %:/,.\\[]"):
     """Clean a string by removing selected characters.
 
-    Creates a legal and 'clean' source string from a string by removing some 
+    Creates a legal and 'clean' source string from a string by removing some
     clutter and  characters not allowed in filenames.
     A default set is given but the user can override the default string.
 
@@ -242,7 +242,7 @@ def downloadUntar(tgzFilename, url, destinationDir=None,  tarFilename=None):
 
     Returns:
         | ([string]): list of filenames saved, or None if failed.
- 
+
     Raises:
         | Exceptions are handled internally and signaled by return value.
     """
@@ -263,7 +263,7 @@ def downloadUntar(tgzFilename, url, destinationDir=None,  tarFilename=None):
     if  os.path.isfile(tgzPath):
         tgzAvailable = True
         # print('{} is already available, download not required'.format(tgzPath))
-    else:    
+    else:
         urlfile = url+tgzFilename
         # print("Attempting to download the data file {}".format(urlfile))
         if downloadFileUrl(urlfile) is None:
@@ -339,7 +339,7 @@ def unzipGZipfile(zipfilename, saveFilename=None):
     """Unzip a file that was compressed using the gzip format.
 
     The zipfilename is used to open a file, to the saveFilename specified.
-    If no saveFilename is given, the basename of the zipfilename is used, 
+    If no saveFilename is given, the basename of the zipfilename is used,
     but with the file extension removed.
 
     Args:
@@ -427,10 +427,10 @@ def downloadFileUrl(url,  saveFilename=None):
 def listFiles(root, patterns='*', recurse=1, return_folders=0, useRegex=False):
     """Lists the files/directories meeting specific requirement
 
-        Returns a list of file paths to files in a file system, searching a 
-        directory structure along the specified path, looking for files 
-        that matches the glob pattern. If specified, the search will continue 
-        into sub-directories.  A list of matching names is returned. The 
+        Returns a list of file paths to files in a file system, searching a
+        directory structure along the specified path, looking for files
+        that matches the glob pattern. If specified, the search will continue
+        into sub-directories.  A list of matching names is returned. The
         function supports a local or network reachable filesystem, but not URLs.
 
     Args:
@@ -483,7 +483,7 @@ def listFiles(root, patterns='*', recurse=1, return_folders=0, useRegex=False):
 def rawFrameToImageFile(image, filename):
     """Writes a single raw image frame to image file.
     The file type must be given, e.g. png or jpg.
-    The image need not be scaled beforehand, it is done prior 
+    The image need not be scaled beforehand, it is done prior
     to writing out the image. Could be one of
     BMP, JPG, JPEG, PNG, PPM, TIFF, XBM, XPM)
     but the file types available depends
@@ -506,7 +506,7 @@ def rawFrameToImageFile(image, filename):
 
     # http://scikit-image.org/docs/dev/api/skimage.io.html#imsave
     import skimage.io as io
-    io.imsave(filename, image) 
+    io.imsave(filename, image)
 
 
 ################################################################
@@ -515,7 +515,7 @@ def readRawFrames(fname, rows, cols, vartype, loadFrames=[]):
     """ Loading multi-frame two-dimensional arrays from a raw data file of known data type.
 
         The file must consist of multiple frames, all with the same number of rows and columns.
-        Frames of different data types can be read, according to the user specification.  
+        Frames of different data types can be read, according to the user specification.
         The user can specify which frames must be loaded (if not the whole file).
 
     Args:
@@ -692,7 +692,7 @@ def read2DLookupTable(filename):
 
         From line/row 3 onwards the first element is the x abscissa value
         followed by the row of data, one point for each y abscissa value.
-        
+
         The file format can depicted as follows: ::
 
             x-name y-name ordinates-name
@@ -727,7 +727,7 @@ def read2DLookupTable(filename):
         xlabel, ylabel, title = lines[0].split()
     aArray = np.loadtxt(filename, skiprows=1, dtype=float)
     xVec = aArray[1:, 0]
-    yVec = aArray[0, 1:] 
+    yVec = aArray[0, 1:]
     data = aArray[1:, 1:]
     return(xVec, yVec, data, xlabel, ylabel, title)
 
@@ -747,7 +747,7 @@ if __name__ == '__main__':
 
     # read two-dimensional lookup table
     xVec,yVec,data,xlabel, ylabel, title = read2DLookupTable('data/OTBMLSNavMar15Nov4_10-C1E.txt')
-  
+
     p = ryplot.Plotter(1)
     for azim in [0,18,36]:
         p.plot(1,yVec,data[azim,:],xlabel='Zenith [rad]',ylabel='Irradiance [W/m$^2$]',
@@ -804,7 +804,7 @@ if __name__ == '__main__':
     ##------------------------- plot sample spectra ------------------------------
     smpleplt = ryplot.Plotter(1, 1, 1)
     smpleplt.plot(1, wavelength, samples, "Sample reflectance", r'Wavelength $\mu$m',
-                r'Reflectance', 
+                r'Reflectance',
                 ['r-', 'g-', 'y-','g--', 'b-', 'm-'],label=samplesTxt,legendAlpha=0.5)
     smpleplt.saveFig('SampleReflectance'+'.png')
 

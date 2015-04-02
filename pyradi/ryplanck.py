@@ -30,10 +30,10 @@ exitance can also be calculated by using the Stefan-Boltzman equation, in
 [W/m^2] or [q/(s.m^2)].  'Exitance' is the CIE/ISO term for the older term 'emittance'.
 
 The Planck and temperature-derivative Planck functions take the spectral variable
-(wavelength, wavenumber or frequency) and/or temperature as either a scalar, a 
+(wavelength, wavenumber or frequency) and/or temperature as either a scalar, a
 single element list, a multi-element list or a numpy array.
 
-Spectral values must be strictly scalar or shape (N,) or (N,1).  
+Spectral values must be strictly scalar or shape (N,) or (N,1).
 Shape (1,N) will not work.
 
 Temperature values must be strictly scalar, list[M], shape (M,), (M,1), or (1,M).
@@ -42,7 +42,7 @@ Shape (Q,M) will not work.
 If the spectral variable and temperature are both single numbers (scalars or lists
 with one element), the return value is a scalar.  If either the temperature or the
 spectral variable are single-valued, the return value is a rank-1 vector. If both
-the temperature and spectral variable are multi-valued, the return value is a 
+the temperature and spectral variable are multi-valued, the return value is a
 rank-2 array, with the spectral variable along axis=0.
 
 This module uses the CODATA physical constants. For more details see
@@ -50,8 +50,8 @@ http://physics.nist.gov/cuu/pdf/RevModPhysCODATA2010.pdf
 
 See the __main__ function for testing and examples of use.
 
-This package was partly developed to provide additional material in support of students 
-and readers of the book Electro-Optical System Analysis and Design: A Radiometry 
+This package was partly developed to provide additional material in support of students
+and readers of the book Electro-Optical System Analysis and Design: A Radiometry
 Perspective,  Cornelius J. Willers, ISBN 9780819495693, SPIE Monograph Volume
 PM236, SPIE Press, 2013.  http://spie.org/x648.html?product_id=2021423&origin_id=x646
 """
@@ -68,9 +68,9 @@ __all__=['planck','dplanck','stefanboltzman','planckef',  'planckel', 'plancken'
 'dplnckql', 'dplnckqn','an','printConstants']
 
 import sys
-if sys.version_info[0] > 2:
-    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
-    exit(-1)
+#if sys.version_info[0] > 2:
+#    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
+#    exit(-1)
 
 import numpy as np
 import scipy.constants as const
@@ -89,9 +89,9 @@ class PlanckConstants:
 
        This module uses the CODATA physical constants. For more details see
        http://physics.nist.gov/cuu/pdf/RevModPhysCODATA2010.pdf
- 
-       
-       
+
+
+
         Reference: http://docs.scipy.org/doc/scipy/reference/constants.html
     """
 
@@ -199,9 +199,9 @@ pconst = PlanckConstants()
 ################################################################
 ##
 def fixDimensions(planckFun):
-  """Decorator function to prepare the spectral and temperature array 
+  """Decorator function to prepare the spectral and temperature array
   dimensions and order before and after the actual Planck function.
-  The Planck functions process elementwise and therefore require 
+  The Planck functions process elementwise and therefore require
   flattened arrays.  This decorator flattens, executes the planck function
   and reshape afterwards the correct shape, according to input.
   """
@@ -232,7 +232,7 @@ def fixDimensions(planckFun):
     temp = np.where(temp!=0.0, temp, 1e-300);
 
     #this is the actual planck calculation
-    planckA = planckFun(spec,temp) 
+    planckA = planckFun(spec,temp)
 
     #now unflatten to proper structure again, spectral along axis=0
     if tempIn.shape[0] == 1 and specIn.shape[0] == 1:
@@ -633,8 +633,8 @@ dplancktype = {'el' : dplnckel, 'ef' : dplnckef, 'en' : dplncken, \
 def planck(spectral, temperature, type='el'):
     """Planck law spectral exitance.
 
-    Calculates the Planck law spectral exitance from a surface at the stated 
-    temperature. Temperature can be a scalar, a list or an array. Exitance can 
+    Calculates the Planck law spectral exitance from a surface at the stated
+    temperature. Temperature can be a scalar, a list or an array. Exitance can
     be given in radiant or photon rate units, depending on user input in type.
 
     Args:
@@ -675,8 +675,8 @@ def dplanck(spectral, temperature, type='el'):
 
     Calculates the temperature derivative for Planck law spectral exitance
     from a surface at the stated temperature. dM/dT can be given in radiant or
-    photon rate units, depending on user input in type. Temperature can be a 
-    scalar, a list or an array. 
+    photon rate units, depending on user input in type. Temperature can be a
+    scalar, a list or an array.
 
     Args:
         | spectral (scalar, np.array (N,) or (N,1)):  spectral vector in  [micrometer], [cm-1] or [Hz].
@@ -715,7 +715,7 @@ if __name__ == '__init__':
     pass
 
 if __name__ == '__main__':
-    
+
     import ryutils
 
     if True:
@@ -728,40 +728,40 @@ if __name__ == '__main__':
         # test different input types for temperature but with spectral array
         wavelen = np.linspace(1.0, 2.0, 100)
         #test for scalar temperature
-        m = planckel(wavelen, 300) 
+        m = planckel(wavelen, 300)
         print('Array spectral {} & scalar temperature input, output shape is {}'.format(wavelen.shape, m.shape))
         #test for list of temperature values
         temp =  [300]
-        m = planckel(wavelen,temp) 
+        m = planckel(wavelen,temp)
         print('Array spectral {} &  list with len()={} temperature input, output shape is {}'.format(wavelen.shape, len(temp), m.shape))
         #test for list of temperature values
         temp =  [300, 350, 500]
-        m = planckel(wavelen,temp) 
+        m = planckel(wavelen,temp)
         print('Array spectral {} & list with len()={} temperature input, output shape is {}'.format(wavelen.shape, len(temp), m.shape))
         #test for array of temperature values
         temp =  np.asarray([300, 350, 400, 450, 500])
-        m = planckel(wavelen,temp) 
+        m = planckel(wavelen,temp)
         print('Array spectral {} & array with shape={} temperature input, output shape is {}'.format(wavelen.shape, temp.shape, m.shape))
         #test for array of temperature values
         temp =  np.asarray([300, 350, 400, 450, 500]).reshape(1,-1)
-        m = planckel(wavelen,temp.T) 
+        m = planckel(wavelen,temp.T)
         print('Array spectral {} & array with shape={} temperature input, output shape is {}'.format(wavelen.shape, temp.shape, m.shape))
 
         # test different input types for temperature but with spectral as scalar
         #test for scalar temperature
-        m = planckel(wavelen[0], 300) 
+        m = planckel(wavelen[0], 300)
         print('Scalar spectral & scalar temperature input, output shape is {}'.format(m.shape))
         #test for list of temperature values
         temp =  [300]
-        m = planckel(wavelen[0],temp) 
+        m = planckel(wavelen[0],temp)
         print('Scalar spectral & list temperature with len()={} input, output shape is {}'.format(len(temp), m.shape))
         #test for list of temperature values
         temp =  [300, 350, 500]
-        m = planckel(wavelen[0],temp) 
+        m = planckel(wavelen[0],temp)
         print('Scalar spectral & list temperature with len()={} input, output shape is {}'.format(len(temp), m.shape))
         #test for list of temperature values
         temp =  np.asarray([300, 350, 400, 450, 500])
-        m = planckel(wavelen[0],temp) 
+        m = planckel(wavelen[0],temp)
         print('Scalar spectral & array temperature with shape={}  input, output shape is {}'.format(temp.shape, m.shape))
 
         print(' ')

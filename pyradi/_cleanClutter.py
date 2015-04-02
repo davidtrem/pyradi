@@ -37,7 +37,7 @@ def QueryDelete(recurse,dir,patn):
     thefiles = listFiles(dir, patn,recurse)
     if len(thefiles)>0:
         for filename in thefiles:
-            print filename
+            print(filename)
         instr=raw_input("Delete these files? (y/n)")
         if instr=='y':
             for filename in thefiles:
@@ -50,9 +50,3 @@ def QueryDelete(recurse,dir,patn):
 QueryDelete(0,'.', '*.eps;*.png;*.jpg;*.pdf;*.txt;*.tiff;*.dat;*.lut')
 QueryDelete(0,'.', 'tape7-*.txt;arr*.txt;Traje*.txt;trian*.txt;vertex*.txt')
 QueryDelete(0,'.', 'arr*.txt;colourcoordinates.*;tar;*.svg' )
-
-
-
-
-
-

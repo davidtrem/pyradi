@@ -72,9 +72,9 @@ __all__=['myint','mylong','myfloat','mybyte', 'mydouble', 'ReadPTWHeader',
 'ShowHeader', 'GetPTWFrame', 'GetPTWFrames']
 
 import sys
-if sys.version_info[0] > 2:
-    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
-    exit(-1)
+#if sys.version_info[0] > 2:
+#    print("pyradi is not yet ported to Python 3, because imported modules are not yet ported")
+#    exit(-1)
 
 import collections
 import os.path
@@ -99,7 +99,7 @@ import copy
 
 ################################################################
 # Miscelaneous functions to read bytes, int, long, float values.
-# 
+#
 # https://docs.python.org/3/library/struct.html
 
 def myint(x):
@@ -339,7 +339,7 @@ def readPTWHeader(ptwfilename):
 
     # Read file to get the header size
     Header.FileName = ptwfilename
-    fid = open(ptwfilename,'rb')
+    fid = open(ptwfilename,'r')
     headerinfo = fid.read(16)
     fid.close()
     MainHeaderSize = mylong(headerinfo[11:15])
@@ -865,7 +865,7 @@ class JadeCalibrationData:
     """
 
     def __init__(self,filename, datafileroot):
-    
+
         self.dicCaldata = collections.defaultdict(float)
         # dicSpectrals = collections.defaultdict(str)
         # dicRadiance = collections.defaultdict(str)
@@ -876,7 +876,7 @@ class JadeCalibrationData:
 
         self.pathtoXML = os.path.dirname(filename)
         self.datafileroot = datafileroot
-    
+
         self.wl = None
         ftree = ET.parse(filename)
         froot = ftree.getroot()
@@ -890,7 +890,7 @@ class JadeCalibrationData:
         self.filterName = os.path.basename(self.filterFilename)[:-4]
         self.sourceEmisFilename = '/'.join([self.datafileroot,froot.find(".//SourceEmis").attrib["Filename"]])
         self.atmoTauFilename = '/'.join([self.datafileroot,froot.find(".//AtmoTau").attrib["Filename"]])
-    
+
         self.detectorPitch = float(froot.find(".//DetectorPitch").attrib["Value"])
         self.fillFactor = float(froot.find(".//FillFactor").attrib["Value"])
         self.focallength = float(froot.find(".//Focallength").attrib["Value"])
@@ -930,9 +930,9 @@ class JadeCalibrationData:
 
         self.LU = rylookup.RadLookup(self.name, nu, tmprLow=tmprLow, tmprHi=tmprHi, tmprInc=tmprInc,
                 sensorResp=self.sensorResponseFilename, opticsTau=self.opticsTransmittanceFilename,
-                filterTau=self.filterFilename, atmoTau=self.atmoTauFilename, 
-                sourceEmis=self.sourceEmisFilename, 
-                sigMin=0., sigMax=2.0**14, sigInc=2.0**6, dicCaldata=self.dicCaldata, 
+                filterTau=self.filterFilename, atmoTau=self.atmoTauFilename,
+                sourceEmis=self.sourceEmisFilename,
+                sigMin=0., sigMax=2.0**14, sigInc=2.0**6, dicCaldata=self.dicCaldata,
                 dicPower=self.dicPower, dicFloor=self.dicFloor)
 
     def Info(self):
@@ -951,7 +951,7 @@ class JadeCalibrationData:
         str += 'integrationTime              = {}\n'.format(self.integrationTime)
         str += 'Fnumber                      = {}\n'.format(self.fnumber)
         str += self.LU.Info()
-   
+
         return str
 
 ################################################################
@@ -1013,24 +1013,24 @@ if __name__ == '__main__':
     print(' ')
     for Tint in [17.1]:
         for DL in [4571, 5132, 5906, 6887, 8034, 9338, 10834, 12386, 14042 ]:
-            print('Tint={}  DL={} T={:.1f} C  L(filter)={:.0f}  L(no filter)={:.0f} W/(sr.m2)'.format(Tint, DL, 
-                calData.LU.LookupDLTemp(DL, Tint)-273.15, 
+            print('Tint={}  DL={} T={:.1f} C  L(filter)={:.0f}  L(no filter)={:.0f} W/(sr.m2)'.format(Tint, DL,
+                calData.LU.LookupDLTemp(DL, Tint)-273.15,
                 calData.LU.LookupDLRad(DL, Tint),
                 calData.LU.LookupTempRad(calData.LU.LookupDLTemp(DL, Tint), withFilter=False)))
     print(' ')
 
     for Tint in [34.4]:
       for DL in [5477, 6050, 6817, 7789, 8922, 10262, 11694, 13299, 14921 ]:
-        print('Tint={}  DL={} T={:.1f} C  L(filter)={:.0f}  L(no filter)={:.0f} W/(sr.m2)'.format(Tint, DL, 
-            calData.LU.LookupDLTemp(DL, Tint)-273.15, 
+        print('Tint={}  DL={} T={:.1f} C  L(filter)={:.0f}  L(no filter)={:.0f} W/(sr.m2)'.format(Tint, DL,
+            calData.LU.LookupDLTemp(DL, Tint)-273.15,
             calData.LU.LookupDLRad(DL, Tint),
             calData.LU.LookupTempRad(calData.LU.LookupDLTemp(DL, Tint), withFilter=False)))
     print(' ')
 
     for Tint in [25]:
       for DL in [5477, 6050, 6817, 7789, 8922, 10262, 11694, 13299, 14921 ]:
-        print('Tint={} DL={}  T={:.1f} C  L(filter)={:.0f}  L(no filter)={:.0f} W/(sr.m2)'.format(Tint, DL, 
-            calData.LU.LookupDLTemp(DL, Tint)-273.15, 
+        print('Tint={} DL={}  T={:.1f} C  L(filter)={:.0f}  L(no filter)={:.0f} W/(sr.m2)'.format(Tint, DL,
+            calData.LU.LookupDLTemp(DL, Tint)-273.15,
             calData.LU.LookupDLRad(DL, Tint),
             calData.LU.LookupTempRad(calData.LU.LookupDLTemp(DL, Tint), withFilter=False)))
     print(' ')
