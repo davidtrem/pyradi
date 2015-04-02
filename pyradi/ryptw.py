@@ -113,7 +113,8 @@ def myint(x):
 
 def mylong(x):
     # four bytes length
-    ans = ord(x[0])+(ord(x[1])<<8)+(ord(x[2])<<16)+(ord(x[3])<<32)
+    #ans = ord(x[0])+(ord(x[1])<<8)+(ord(x[2])<<16)+(ord(x[3])<<32)
+    ans = x[0] + (x[1]<<8) + (x[2]<<16) + (x[3]<<32)
     return ans
 
 def myfloat(x):
@@ -339,7 +340,7 @@ def readPTWHeader(ptwfilename):
 
     # Read file to get the header size
     Header.FileName = ptwfilename
-    fid = open(ptwfilename,'r')
+    fid = open(ptwfilename,'rb')
     headerinfo = fid.read(16)
     fid.close()
     MainHeaderSize = mylong(headerinfo[11:15])
@@ -349,9 +350,9 @@ def readPTWHeader(ptwfilename):
     headerinfo = fid.read(MainHeaderSize)
 
     Header.h_Signature = headerinfo[0:3]
-    if Header.h_Signature == 'AIO': #AGEMA
+    if Header.h_Signature == b'AIO': #AGEMA
         Header.h_format = 'agema'
-    elif Header.h_Signature == 'CED':
+    elif Header.h_Signature == b'CED':
         Header.h_format = 'cedip'
         Header.h_unit = 'dl'
 
@@ -443,7 +444,7 @@ def readPTWHeader(ptwfilename):
     Header.h_SATIRLocationLongitude = myfloat(headerinfo[385:389]) # SATIR
     Header.h_SATIRLocationLatitude = myfloat(headerinfo[389:393]) # SATIR South is negative
     Header.h_SATIRLocationAltitude = myfloat(headerinfo[393:397]) # SATIR
-    Header.h_ExternalSynch = ord(headerinfo[397]) # 1=External 0 = Internal
+    Header.h_ExternalSynch = headerinfo[397] # 1=External 0 = Internal
     Header.h_CEDIPAquisitionPeriod = myfloat(headerinfo[403:407]) # CEDIP seconds
     Header.h_CEDIPIntegrationTime = myfloat(headerinfo[407:411]) # CEDIP seconds
     Header.h_WOLFSubwindowCapability = myint(headerinfo[411:413]) # WOLF
